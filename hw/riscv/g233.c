@@ -53,6 +53,7 @@ static void g233_soc_init(Object *obj)
      * You can add more devices here(e.g. cpu, gpio)
      * Attention: The cpu resetvec is 0x1004
      */
+
 }
 
 static void g233_soc_realize(DeviceState *dev, Error **errp)
