@@ -39,6 +39,16 @@ static bool trans_sort(DisasContext *ctx, arg_sort *a)
     return true;
 }
 
+static bool trans_crush(DisasContext *ctx, arg_crush *a)
+{
+    TCGv dst = get_gpr(ctx, a->rd, EXT_NONE);
+    TCGv src = get_gpr(ctx, a->rs1, EXT_NONE);
+    TCGv n = get_gpr(ctx, a->rs2, EXT_NONE);
+
+    gen_helper_crush(tcg_env, dst, src, n);
+    return true;
+}
+
 static bool trans_illegal(DisasContext *ctx, arg_empty *a)
 {
     gen_exception_illegal(ctx);

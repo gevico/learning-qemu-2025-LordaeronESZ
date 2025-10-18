@@ -77,6 +77,35 @@ void helper_sort(CPURISCVState *env, uintptr_t start,
     }
 }
 
+void helper_crush(CPURISCVState *env, uintptr_t dst,
+                  uintptr_t src, target_ulong n)
+{
+    int i, j;
+    uintptr_t src_p1, src_p2, dst_p;
+    u_int8_t lo, hi, val;
+
+    i = j = 0;
+    while (i + 1 < n) {
+        src_p1 = src + i;
+        src_p2 = src + i + 1;
+        dst_p = dst + j;
+        lo = cpu_ldub_data(env, src_p1) & 0x0F;
+        hi = cpu_ldub_data(env, src_p2) & 0x0F;
+        val = lo | (hi << 4);
+        cpu_stb_data(env, dst_p, val);
+        i += 2;
+        ++j;
+    }
+
+    if (i < n) {
+        src_p1 = src + i;
+        dst_p = dst + j;
+        val = cpu_ldub_data(env, src_p1) & 0x0F;
+        cpu_stb_data(env, dst_p, val);
+        ++j;
+    }
+}
+
 /* Exceptions processing helpers */
 G_NORETURN void riscv_raise_exception(CPURISCVState *env,
                                       RISCVException exception,
