@@ -1,3 +1,6 @@
+/* Learninig QEMU */
+DEF_HELPER_4(dma, void, env, tl, tl, tl)
+
 /* Exceptions */
 DEF_HELPER_2(raise_exception, noreturn, env, i32)
 
