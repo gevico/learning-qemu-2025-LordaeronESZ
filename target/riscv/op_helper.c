@@ -52,6 +52,31 @@ void helper_dma(CPURISCVState *env, uintptr_t dst,
     }
 }
 
+void helper_sort(CPURISCVState *env, uintptr_t start,
+                 target_ulong n, target_ulong cnt)
+{
+    int i, j;
+    int x, y;
+    uintptr_t xp, yp;
+
+    if (n < cnt) {
+        riscv_raise_exception(env, RISCV_EXCP_ILLEGAL_INST, GETPC());
+    }
+
+    for (i = cnt - 1; i > 0; --i) {
+        for (j = 0; j < i; ++j) {
+            xp = start + j * sizeof(int);
+            yp = start + (j + 1) * sizeof(int);
+            x = cpu_ldl_data(env, xp);
+            y = cpu_ldl_data(env, yp);
+            if (x > y) {
+                cpu_stl_data(env, xp, y);
+                cpu_stl_data(env, yp, x);
+            }
+        }
+    }
+}
+
 /* Exceptions processing helpers */
 G_NORETURN void riscv_raise_exception(CPURISCVState *env,
                                       RISCVException exception,

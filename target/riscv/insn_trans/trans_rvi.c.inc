@@ -29,6 +29,16 @@ static bool trans_dma(DisasContext *ctx, arg_dma *a)
     return true;
 }
 
+static bool trans_sort(DisasContext *ctx, arg_sort *a)
+{
+    TCGv start = get_gpr(ctx, a->rs1, EXT_NONE);
+    TCGv n = get_gpr(ctx, a->rs2, EXT_NONE);
+    TCGv cnt = get_gpr(ctx, a->rd, EXT_NONE);
+
+    gen_helper_sort(tcg_env, start, n, cnt);
+    return true;
+}
+
 static bool trans_illegal(DisasContext *ctx, arg_empty *a)
 {
     gen_exception_illegal(ctx);
