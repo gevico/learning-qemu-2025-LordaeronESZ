@@ -106,6 +106,24 @@ void helper_crush(CPURISCVState *env, uintptr_t dst,
     }
 }
 
+void helper_expand(CPURISCVState *env, uintptr_t dst,
+                   uintptr_t src, target_ulong n)
+{
+    int i, j;
+    uintptr_t src_p, dst_p;
+    u_int8_t val;
+
+    j = 0;
+    for (i = 0; i < n; ++i) {
+        src_p = src + i;
+        dst_p = dst + j++;
+        val = cpu_ldub_data(env, src_p);
+        cpu_stb_data(env, dst_p, val & 0x0F);
+        dst_p = dst + j++;
+        cpu_stb_data(env, dst_p, (val >> 4) & 0x0F);
+    }
+}
+
 /* Exceptions processing helpers */
 G_NORETURN void riscv_raise_exception(CPURISCVState *env,
                                       RISCVException exception,
