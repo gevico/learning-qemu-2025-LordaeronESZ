@@ -1,3 +1,8 @@
+config G233_SPI
+    bool
+    default y
+    depends on RISCV32 || RISCV64
+
 config APPLESMC
     bool
     depends on ISA_BUS
